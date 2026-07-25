@@ -14,6 +14,8 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ SITE_NAME }}">
     <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image" content="{{ SITE_DOMAIN }}/static/images/logo.svg">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -68,9 +70,9 @@
 <nav class="navbar">
     <div class="container">
         <a href="{{ url_for('index') }}" class="navbar-brand">
-            <span class="logo-mark">LE</span>
+            <img src="{{ url_for('static', filename='images/logo-emblem.svg') }}" class="logo-emblem" alt="Lohit Enterprises emblem" width="48" height="48">
             <div>
-                <span class="logo-text">LOHIT ENTERPRISES</span>
+                <span class="logo-text">LOHIT ENTERPRISES LLC</span>
                 <span class="logo-sub">Quality Used Cars · Blytheville, AR</span>
             </div>
         </a>

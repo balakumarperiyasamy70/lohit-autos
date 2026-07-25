@@ -80,6 +80,7 @@ img { max-width: 100%; display: block; }
     display: grid; place-items: center; font-family: 'Oswald'; font-weight: 700; font-size: 1.25rem;
     letter-spacing: .5px;
 }
+.logo-emblem { width: 48px; height: 48px; flex: none; display: block; }
 .logo-text { font-size: 1.35rem; color: #fff; line-height: 1; display: block; }
 .logo-sub { font-size: .64rem; color: var(--gold-light); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-top: 3px; }
 .nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }

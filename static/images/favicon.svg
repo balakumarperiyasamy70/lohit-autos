@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Lohit Enterprises">
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14" fill="#14263f"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14" fill="none" stroke="#E0A422" stroke-width="2.5"/>
+  <g transform="translate(32,34) scale(0.66)">
+    <polygon points="-13,-16 9,-16 15,-6 -19,-6" fill="#f2c14e"/>
+    <rect x="-30" y="-6" width="60" height="12" rx="6" fill="#f2c14e"/>
+    <circle cx="-16" cy="7" r="6" fill="#14263f"/><circle cx="-16" cy="7" r="2.2" fill="#f2c14e"/>
+    <circle cx="16" cy="7" r="6" fill="#14263f"/><circle cx="16" cy="7" r="2.2" fill="#f2c14e"/>
+  </g>
+</svg>
