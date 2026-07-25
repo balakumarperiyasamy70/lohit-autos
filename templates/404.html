@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Page Not Found — {{ SITE_NAME }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block content %}
+<section class="section thankyou">
+    <div class="container thankyou-inner">
+        <div class="thankyou-check thankyou-404">404</div>
+        <h1>Page Not Found</h1>
+        <p>Sorry, we couldn't find that page. It may have sold or moved.</p>
+        <div class="hero-actions center">
+            <a href="{{ url_for('inventory') }}" class="btn btn-primary btn-lg">Browse Inventory</a>
+            <a href="{{ url_for('index') }}" class="btn btn-outline btn-lg">Back to Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us — {{ SITE_NAME }}, Blytheville AR{% endblock %}
+{% block description %}Contact {{ SITE_NAME }} in Blytheville, Arkansas. Call, email, or visit our lot. We're happy to answer questions and schedule test drives.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p>Questions about a vehicle, financing, or a trade? We'd love to hear from you.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container form-page-layout">
+        <div class="form-page-info">
+            <span class="eyebrow">Get in touch</span>
+            <h2>Visit Our Lot</h2>
+            <div class="contact-details">
+                <div class="contact-line"><span>📍</span><div><strong>Address</strong><br>{{ BUSINESS_ADDRESS }}</div></div>
+                <div class="contact-line"><span>📞</span><div><strong>Phone</strong><br><a href="tel:+1{{ BUSINESS_PHONE_RAW }}">{{ BUSINESS_PHONE }}</a></div></div>
+                <div class="contact-line"><span>✉</span><div><strong>Email</strong><br><a href="mailto:{{ BUSINESS_EMAIL }}">{{ BUSINESS_EMAIL }}</a></div></div>
+                <div class="contact-line"><span>🕐</span><div><strong>Hours</strong><br>{{ BUSINESS_HOURS }}<br>Open 7 days a week</div></div>
+            </div>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ BUSINESS_ADDRESS|urlencode }}" target="_blank" rel="noopener" class="btn btn-outline btn-block">Open in Google Maps →</a>
+        </div>
+
+        <div class="form-card">
+            <h2>Send a Message</h2>
+            <form action="{{ url_for('contact') }}" method="post" class="lead-form">
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="Your name*" required>
+                    <input type="tel" name="phone" placeholder="Phone">
+                </div>
+                <input type="email" name="email" placeholder="Email address">
+                <textarea name="message" rows="5" placeholder="How can we help?*" required></textarea>
+                <button type="submit" class="btn btn-gold btn-lg btn-block">Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

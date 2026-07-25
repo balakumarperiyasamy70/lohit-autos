@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{% block title %}Admin — Lohit Enterprises{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="admin-body">
+<header class="admin-topbar">
+    <div class="admin-topbar-inner">
+        <a href="{{ url_for('admin_dashboard') }}" class="admin-logo">LOHIT <span>Admin</span></a>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if active == 'dashboard' }}">Dashboard</a>
+            <a href="{{ url_for('admin_vehicles') }}" class="{{ 'active' if active == 'vehicles' }}">Vehicles</a>
+            <a href="{{ url_for('admin_leads') }}" class="{{ 'active' if active == 'leads' }}">Leads</a>
+        </nav>
+        <div class="admin-topbar-right">
+            <a href="{{ url_for('index') }}" target="_blank" class="admin-viewsite">View Site ↗</a>
+            <a href="{{ url_for('admin_logout') }}" class="admin-logout">Log out</a>
+        </div>
+    </div>
+</header>
+
+<main class="admin-main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, msg in messages %}
+          <div class="flash flash-{{ category }}">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

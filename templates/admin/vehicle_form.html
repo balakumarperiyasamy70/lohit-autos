@@ -1,0 +1,113 @@
+{% extends 'admin/base.html' %}
+{% set active = 'vehicles' %}
+{% block title %}{{ 'Add' if mode == 'new' else 'Edit' }} Vehicle — Lohit Admin{% endblock %}
+
+{% block content %}
+<div class="admin-head">
+    <h1>{{ 'Add Vehicle' if mode == 'new' else 'Edit Vehicle' }}</h1>
+    <a href="{{ url_for('admin_vehicles') }}" class="btn btn-outline">← Back to list</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="admin-form"
+      action="{{ url_for('admin_vehicle_new') if mode == 'new' else url_for('admin_vehicle_edit', vehicle_id=v.id) }}">
+
+    <div class="admin-form-section">
+        <h3>Basics</h3>
+        <div class="admin-grid">
+            <label>Stock #* <input type="text" name="stock_number" value="{{ v.stock_number or '' }}" required></label>
+            <label>VIN <input type="text" name="vin" value="{{ v.vin or '' }}"></label>
+            <label>Year* <input type="number" name="year" value="{{ v.year or '' }}" min="1950" max="2027" required></label>
+            <label>Make* <input type="text" name="make" value="{{ v.make or '' }}" required></label>
+            <label>Model* <input type="text" name="model" value="{{ v.model or '' }}" required></label>
+            <label>Trim <input type="text" name="trim" value="{{ v.trim or '' }}"></label>
+            <label>Body Type
+                <select name="body_type">
+                    <option value="">—</option>
+                    {% for b in ['Sedan','SUV','Truck','Coupe','Hatchback','Van','Minivan','Convertible','Wagon'] %}
+                    <option {{ 'selected' if v.body_type == b }}>{{ b }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Price ($)* <input type="number" name="price" value="{{ '{:.0f}'.format(v.price) if v.price else '' }}" min="0" step="1" required></label>
+            <label>Mileage <input type="number" name="mileage" value="{{ v.mileage or '' }}" min="0"></label>
+            <label>Status
+                <select name="status">
+                    {% for s in ['available','pending','sold'] %}
+                    <option {{ 'selected' if v.status == s }}>{{ s }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <label class="checkbox-label"><input type="checkbox" name="featured" {{ 'checked' if v.featured }}> Feature on homepage</label>
+    </div>
+
+    <div class="admin-form-section">
+        <h3>Specifications</h3>
+        <div class="admin-grid">
+            <label>Exterior Color <input type="text" name="exterior_color" value="{{ v.exterior_color or '' }}"></label>
+            <label>Interior Color <input type="text" name="interior_color" value="{{ v.interior_color or '' }}"></label>
+            <label>Transmission
+                <select name="transmission">
+                    <option value="">—</option>
+                    {% for t in ['Automatic','Manual','CVT'] %}<option {{ 'selected' if v.transmission == t }}>{{ t }}</option>{% endfor %}
+                </select>
+            </label>
+            <label>Drivetrain
+                <select name="drivetrain">
+                    <option value="">—</option>
+                    {% for d in ['FWD','RWD','AWD','4WD'] %}<option {{ 'selected' if v.drivetrain == d }}>{{ d }}</option>{% endfor %}
+                </select>
+            </label>
+            <label>Fuel Type
+                <select name="fuel_type">
+                    <option value="">—</option>
+                    {% for f in ['Gasoline','Diesel','Hybrid','Electric','Flex Fuel'] %}<option {{ 'selected' if v.fuel_type == f }}>{{ f }}</option>{% endfor %}
+                </select>
+            </label>
+            <label>Engine <input type="text" name="engine" value="{{ v.engine or '' }}" placeholder="e.g. 2.5L I4"></label>
+            <label>Cylinders <input type="text" name="cylinders" value="{{ v.cylinders or '' }}"></label>
+            <label>Doors <input type="number" name="doors" value="{{ v.doors or '' }}" min="2" max="5"></label>
+            <label>MPG City <input type="number" name="mpg_city" value="{{ v.mpg_city or '' }}" min="0"></label>
+            <label>MPG Highway <input type="number" name="mpg_highway" value="{{ v.mpg_highway or '' }}" min="0"></label>
+        </div>
+    </div>
+
+    <div class="admin-form-section">
+        <h3>Description</h3>
+        <textarea name="description" rows="5" placeholder="Highlight condition, features, service history, and what makes this vehicle a good buy…">{{ v.description or '' }}</textarea>
+    </div>
+
+    <div class="admin-form-section">
+        <h3>Photos</h3>
+        {% if images %}
+        <div class="admin-photo-grid">
+            {% for img in images %}
+            <div class="admin-photo {{ 'is-main' if img.filename == v.main_image }}">
+                <img src="{{ url_for('static', filename='uploads/' ~ img.filename) }}" alt="">
+                {% if img.filename == v.main_image %}<span class="admin-photo-main">Main</span>{% endif %}
+                <div class="admin-photo-actions">
+                    {% if img.filename != v.main_image %}
+                    <form method="post" action="{{ url_for('admin_set_main_image', vehicle_id=v.id, image_id=img.id) }}">
+                        <button type="submit" class="btn-sm">Set main</button>
+                    </form>
+                    {% endif %}
+                    <form method="post" action="{{ url_for('admin_delete_image', vehicle_id=v.id, image_id=img.id) }}" onsubmit="return confirm('Delete this photo?')">
+                        <button type="submit" class="btn-sm btn-sm-danger">✕</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <label class="upload-label">
+            Add photos (first uploaded becomes the main photo if none set)
+            <input type="file" name="images" accept="image/*" multiple>
+        </label>
+    </div>
+
+    <div class="admin-form-footer">
+        <button type="submit" class="btn btn-primary btn-lg">{{ 'Add Vehicle' if mode == 'new' else 'Save Changes' }}</button>
+        <a href="{{ url_for('admin_vehicles') }}" class="btn btn-outline">Cancel</a>
+    </div>
+</form>
+{% endblock %}

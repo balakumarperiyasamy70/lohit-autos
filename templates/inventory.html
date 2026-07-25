@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% from '_card.html' import vehicle_card %}
+
+{% block title %}Used Car Inventory — {{ SITE_NAME }}, Blytheville AR{% endblock %}
+{% block description %}Browse our full inventory of quality used cars, trucks, and SUVs in Blytheville, Arkansas. Filter by make, body type, and price.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="container">
+        <h1>Our Inventory</h1>
+        <p>{{ vehicles|length }} quality pre-owned vehicle{{ '' if vehicles|length == 1 else 's' }} available in Blytheville, AR</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container inventory-layout">
+        <!-- FILTERS -->
+        <aside class="filters">
+            <form action="{{ url_for('inventory') }}" method="get" id="filter-form">
+                <div class="filter-group">
+                    <label>Search</label>
+                    <input type="text" name="q" value="{{ q }}" placeholder="Make, model, year…">
+                </div>
+                <div class="filter-group">
+                    <label>Make</label>
+                    <select name="make">
+                        <option value="">All makes</option>
+                        {% for m in makes %}
+                        <option value="{{ m }}" {{ 'selected' if m == sel_make }}>{{ m }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Body Type</label>
+                    <select name="body">
+                        <option value="">All types</option>
+                        {% for b in bodies %}
+                        <option value="{{ b }}" {{ 'selected' if b == sel_body }}>{{ b }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Max Price</label>
+                    <select name="price_max">
+                        <option value="">Any price</option>
+                        {% for amt in [10000, 15000, 20000, 25000, 30000, 40000] %}
+                        <option value="{{ amt }}" {{ 'selected' if price_max == amt|string }}>Under ${{ '{:,}'.format(amt) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Apply Filters</button>
+                <a href="{{ url_for('inventory') }}" class="filter-reset">Clear all</a>
+            </form>
+        </aside>
+
+        <!-- RESULTS -->
+        <div class="inventory-results">
+            <div class="results-bar">
+                <form action="{{ url_for('inventory') }}" method="get" class="sort-form">
+                    <input type="hidden" name="q" value="{{ q }}">
+                    <input type="hidden" name="make" value="{{ sel_make }}">
+                    <input type="hidden" name="body" value="{{ sel_body }}">
+                    <input type="hidden" name="price_max" value="{{ price_max }}">
+                    <label>Sort:</label>
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="newest" {{ 'selected' if sort == 'newest' }}>Newest arrivals</option>
+                        <option value="price_low" {{ 'selected' if sort == 'price_low' }}>Price: Low to High</option>
+                        <option value="price_high" {{ 'selected' if sort == 'price_high' }}>Price: High to Low</option>
+                        <option value="mileage_low" {{ 'selected' if sort == 'mileage_low' }}>Lowest Mileage</option>
+                        <option value="year_new" {{ 'selected' if sort == 'year_new' }}>Newest Year</option>
+                    </select>
+                </form>
+            </div>
+
+            {% if vehicles %}
+            <div class="car-grid">
+                {% for v in vehicles %}{{ vehicle_card(v) }}{% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state-box">
+                <h3>No vehicles match your search</h3>
+                <p>Try clearing some filters, or <a href="{{ url_for('contact') }}">let us know what you're looking for</a> — we get new inventory regularly.</p>
+                <a href="{{ url_for('inventory') }}" class="btn btn-primary">View All Vehicles</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

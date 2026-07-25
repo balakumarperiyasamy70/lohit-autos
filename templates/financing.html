@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Auto Financing & Pre-Qualification — {{ SITE_NAME }}, Blytheville AR{% endblock %}
+{% block description %}Get pre-qualified for auto financing at {{ SITE_NAME }} in Blytheville, AR. All credit welcome — good, bad, or none. No-obligation, won't affect your credit score.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="container">
+        <h1>Get Pre-Qualified</h1>
+        <p>All credit situations welcome. Quick, no-obligation, and it won't affect your credit score.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container form-page-layout">
+        <div class="form-page-info">
+            <span class="eyebrow">How it works</span>
+            <h2>Financing Made Simple</h2>
+            <ol class="steps-list">
+                <li><strong>Tell us about yourself</strong> — a few quick details, nothing that dings your credit.</li>
+                <li><strong>We shop lenders for you</strong> — we work with multiple lenders to find a fit.</li>
+                <li><strong>Pick your vehicle & drive</strong> — come in, choose your car, and finalize the paperwork.</li>
+            </ol>
+            <div class="info-card">
+                <h4>Why buyers choose us</h4>
+                <ul class="check-list">
+                    <li>Good credit, bad credit, first-time buyer — all welcome</li>
+                    <li>No obligation to buy</li>
+                    <li>Friendly, no-pressure local team</li>
+                    <li>Fast answers, often same day</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h2>Pre-Qualification Form</h2>
+            <form action="{{ url_for('financing') }}" method="post" class="lead-form">
+                <label class="field-label">Your Information</label>
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="Full name*" required>
+                    <input type="tel" name="phone" placeholder="Phone*" required>
+                </div>
+                <input type="email" name="email" placeholder="Email address">
+
+                <label class="field-label">Employment & Income</label>
+                <select name="employment_status">
+                    <option value="">Employment status</option>
+                    <option>Employed full-time</option>
+                    <option>Employed part-time</option>
+                    <option>Self-employed</option>
+                    <option>Retired</option>
+                    <option>Other</option>
+                </select>
+                <div class="form-row">
+                    <input type="number" name="monthly_income" placeholder="Monthly income ($)" min="0" step="100">
+                    <input type="number" name="down_payment" placeholder="Down payment ($)" min="0" step="100">
+                </div>
+
+                <label class="field-label">Estimated Credit</label>
+                <select name="credit_estimate">
+                    <option value="">How's your credit?</option>
+                    <option>Excellent (720+)</option>
+                    <option>Good (660–719)</option>
+                    <option>Fair (600–659)</option>
+                    <option>Poor (under 600)</option>
+                    <option>Not sure</option>
+                </select>
+
+                <textarea name="message" rows="3" placeholder="Anything else we should know? (e.g. a vehicle you're interested in)"></textarea>
+
+                <p class="form-disclaimer">Submitting this form is a request for information only and does not guarantee financing approval. It will not affect your credit score.</p>
+                <button type="submit" class="btn btn-gold btn-lg btn-block">Submit Pre-Qualification</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

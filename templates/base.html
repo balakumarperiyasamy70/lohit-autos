@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ SITE_NAME }} — Quality Used Cars in Blytheville, AR{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ SITE_NAME }} — quality pre-owned cars, trucks, and SUVs in Blytheville, Arkansas. Browse our inventory, get financing, or sell your car today.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}used cars Blytheville AR, used car dealer Arkansas, pre-owned vehicles, used trucks SUVs, buy here pay here, car financing Blytheville, Lohit Enterprises{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical %}{{ SITE_DOMAIN }}{{ request.path }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }} — Quality Used Cars in Blytheville, AR{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Quality pre-owned cars, trucks, and SUVs in Blytheville, Arkansas.{% endblock %}">
+    <meta property="og:url" content="{{ SITE_DOMAIN }}{{ request.path }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ SITE_NAME }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoDealer",
+      "name": "{{ SITE_NAME }}",
+      "description": "Quality pre-owned cars, trucks, and SUVs in Blytheville, Arkansas.",
+      "url": "{{ SITE_DOMAIN }}",
+      "telephone": "+1{{ BUSINESS_PHONE_RAW }}",
+      "email": "{{ BUSINESS_EMAIL }}",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "104 S Porter Dr",
+        "addressLocality": "Blytheville",
+        "addressRegion": "AR",
+        "postalCode": "72315",
+        "addressCountry": "US"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "08:30",
+        "closes": "19:00"
+      },
+      "areaServed": "Blytheville, Arkansas and the Mississippi County region"
+    }
+    </script>
+    {% endblock %}
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="container top-bar-inner">
+        <div class="top-bar-left">
+            <a href="tel:+1{{ BUSINESS_PHONE_RAW }}" class="top-bar-phone">📞 {{ BUSINESS_PHONE }}</a>
+            <span class="top-bar-item hide-mobile">📍 {{ BUSINESS_ADDRESS }}</span>
+        </div>
+        <div class="top-bar-right hide-mobile">
+            <span class="top-bar-item">🕐 {{ BUSINESS_HOURS }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <span class="logo-mark">LE</span>
+            <div>
+                <span class="logo-text">LOHIT ENTERPRISES</span>
+                <span class="logo-sub">Quality Used Cars · Blytheville, AR</span>
+            </div>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+            <li><a href="{{ url_for('financing') }}">Financing</a></li>
+            <li><a href="{{ url_for('sell') }}">Sell/Trade</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li><a href="tel:+1{{ BUSINESS_PHONE_RAW }}" class="btn-call-nav">Call Now</a></li>
+        </ul>
+    </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-wrap container">
+      {% for category, msg in messages %}
+        <div class="flash flash-{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+{% block content %}{% endblock %}
+
+<!-- FOOTER -->
+<footer id="contact-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Lohit Enterprises LLC</h3>
+                <p class="footer-tag">Quality Used Cars · Blytheville, Arkansas</p>
+                <p>Honest deals on quality pre-owned cars, trucks, and SUVs. Family-owned and serving Blytheville and Mississippi County with straightforward pricing and friendly service.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="{{ url_for('inventory') }}">Browse Inventory</a></li>
+                    <li><a href="{{ url_for('financing') }}">Get Pre-Qualified</a></li>
+                    <li><a href="{{ url_for('sell') }}">Sell or Trade-In</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Visit Us</h4>
+                <ul>
+                    <li><a href="#">📍 {{ BUSINESS_ADDRESS }}</a></li>
+                    <li><a href="tel:+1{{ BUSINESS_PHONE_RAW }}">📞 {{ BUSINESS_PHONE }}</a></li>
+                    <li><a href="mailto:{{ BUSINESS_EMAIL }}">✉ {{ BUSINESS_EMAIL }}</a></li>
+                    <li><a href="#">🕐 {{ BUSINESS_HOURS }}</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ current_year }} Lohit Enterprises LLC. All rights reserved. · Blytheville, AR</p>
+        </div>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

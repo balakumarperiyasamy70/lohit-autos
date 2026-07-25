@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Thank You — {{ SITE_NAME }}{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block content %}
+{% set copy = {
+  'inquiry':   ('Message received!', 'Thanks for your interest. We\'ll get back to you shortly about the vehicle.'),
+  'financing': ('Pre-qualification submitted!', 'Thanks! Our team will review your info and reach out with your financing options — often the same day.'),
+  'tradein':   ('Offer request received!', 'Thanks for the details. We\'ll review your vehicle and get back to you with a fair offer.'),
+  'contact':   ('Message sent!', 'Thanks for reaching out. We\'ll respond as soon as we can.')
+} %}
+{% set title, msg = copy.get(kind, copy['inquiry']) %}
+<section class="section thankyou">
+    <div class="container thankyou-inner">
+        <div class="thankyou-check">✓</div>
+        <h1>{{ title }}</h1>
+        <p>{{ msg }}</p>
+        <p class="muted">Need something right away? Call us at <a href="tel:+1{{ BUSINESS_PHONE_RAW }}">{{ BUSINESS_PHONE }}</a>.</p>
+        <div class="hero-actions center">
+            <a href="{{ url_for('inventory') }}" class="btn btn-primary btn-lg">Browse Inventory</a>
+            <a href="{{ url_for('index') }}" class="btn btn-outline btn-lg">Back to Home</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

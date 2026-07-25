@@ -1,0 +1,14 @@
+[Unit]
+Description=Lohit Enterprises Used Car Dealer Flask App
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/opt/lohit-autos
+Environment="PATH=/opt/lohit-autos/venv/bin"
+ExecStart=/opt/lohit-autos/venv/bin/gunicorn -w 2 -b 127.0.0.1:8006 app:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

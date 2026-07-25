@@ -1,0 +1,53 @@
+{% extends 'admin/base.html' %}
+{% set active = 'dashboard' %}
+{% block title %}Dashboard — Lohit Admin{% endblock %}
+
+{% block content %}
+<div class="admin-head">
+    <h1>Dashboard</h1>
+    <a href="{{ url_for('admin_vehicle_new') }}" class="btn btn-primary">+ Add Vehicle</a>
+</div>
+
+<div class="admin-stats">
+    <a href="{{ url_for('admin_vehicles', status='available') }}" class="admin-stat">
+        <span class="admin-stat-num">{{ available }}</span>
+        <span class="admin-stat-label">Available Vehicles</span>
+    </a>
+    <a href="{{ url_for('admin_vehicles', status='sold') }}" class="admin-stat">
+        <span class="admin-stat-num">{{ sold }}</span>
+        <span class="admin-stat-label">Sold</span>
+    </a>
+    <a href="{{ url_for('admin_leads') }}" class="admin-stat admin-stat-highlight">
+        <span class="admin-stat-num">{{ new_leads }}</span>
+        <span class="admin-stat-label">New Leads</span>
+    </a>
+</div>
+
+<div class="admin-panel">
+    <div class="admin-panel-head">
+        <h2>Recent Leads</h2>
+        <a href="{{ url_for('admin_leads') }}">View all →</a>
+    </div>
+    {% if recent_leads %}
+    <table class="admin-table">
+        <thead><tr><th>Date</th><th>Type</th><th>Name</th><th>Contact</th><th>Details</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for l in recent_leads %}
+        <tr>
+            <td class="nowrap">{{ l.created_at.strftime('%b %d, %I:%M %p') }}</td>
+            <td><span class="tag tag-{{ l.lead_type }}">{{ l.lead_type }}</span></td>
+            <td>{{ l.name }}</td>
+            <td class="nowrap">{{ l.phone or l.email or '-' }}</td>
+            <td class="cell-detail">
+                {% if l.v_make %}{{ l.v_year }} {{ l.v_make }} {{ l.v_model }}{% elif l.trade_make %}{{ l.trade_year }} {{ l.trade_make }} {{ l.trade_model }}{% else %}{{ (l.message or '')[:50] }}{% endif %}
+            </td>
+            <td><span class="status status-{{ l.status }}">{{ l.status }}</span></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="admin-empty">No leads yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% macro vehicle_card(v) %}
+<a href="{{ url_for('vehicle', vehicle_id=v.id) }}" class="car-card">
+    <div class="car-card-img">
+        {% if v.main_image %}
+            <img src="{{ url_for('static', filename='uploads/' ~ v.main_image) }}" alt="{{ vehicle_title(v) }}" loading="lazy">
+        {% else %}
+            <div class="car-card-noimg">🚗<span>Photos coming soon</span></div>
+        {% endif %}
+        {% if v.status == 'pending' %}<span class="car-badge badge-pending">Sale Pending</span>{% endif %}
+        {% if v.status == 'sold' %}<span class="car-badge badge-sold">Sold</span>{% endif %}
+        {% if v.body_type %}<span class="car-badge badge-body">{{ v.body_type }}</span>{% endif %}
+    </div>
+    <div class="car-card-body">
+        <h3 class="car-card-title">{{ vehicle_title(v) }}</h3>
+        <div class="car-card-price">${{ '{:,.0f}'.format(v.price) }}</div>
+        <div class="car-card-specs">
+            <span>🛣 {{ '{:,}'.format(v.mileage) }} mi</span>
+            {% if v.transmission %}<span>⚙ {{ v.transmission }}</span>{% endif %}
+            {% if v.fuel_type %}<span>⛽ {{ v.fuel_type }}</span>{% endif %}
+        </div>
+        <span class="car-card-cta">View Details →</span>
+    </div>
+</a>
+{% endmacro %}

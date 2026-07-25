@@ -1,0 +1,57 @@
+{% extends 'admin/base.html' %}
+{% set active = 'vehicles' %}
+{% block title %}Vehicles — Lohit Admin{% endblock %}
+
+{% block content %}
+<div class="admin-head">
+    <h1>Vehicles</h1>
+    <a href="{{ url_for('admin_vehicle_new') }}" class="btn btn-primary">+ Add Vehicle</a>
+</div>
+
+<div class="admin-filters">
+    {% for s in ['all', 'available', 'pending', 'sold'] %}
+    <a href="{{ url_for('admin_vehicles', status=s) }}" class="admin-filter {{ 'active' if status == s }}">{{ s|capitalize }}</a>
+    {% endfor %}
+</div>
+
+<div class="admin-panel">
+    {% if vehicles %}
+    <table class="admin-table">
+        <thead><tr><th>Photo</th><th>Stock #</th><th>Vehicle</th><th>Price</th><th>Mileage</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for v in vehicles %}
+        <tr>
+            <td>
+                {% if v.main_image %}
+                <img src="{{ url_for('static', filename='uploads/' ~ v.main_image) }}" class="admin-thumb" alt="">
+                {% else %}<div class="admin-thumb admin-thumb-empty">🚗</div>{% endif %}
+            </td>
+            <td class="nowrap">{{ v.stock_number }}</td>
+            <td>{{ v.year }} {{ v.make }} {{ v.model }} {{ v.trim or '' }}</td>
+            <td class="nowrap">${{ '{:,.0f}'.format(v.price) }}</td>
+            <td class="nowrap">{{ '{:,}'.format(v.mileage) }}</td>
+            <td><span class="status status-veh-{{ v.status }}">{{ v.status }}</span></td>
+            <td>{{ '★' if v.featured else '—' }}</td>
+            <td class="admin-actions">
+                <a href="{{ url_for('admin_vehicle_edit', vehicle_id=v.id) }}" class="btn-sm">Edit</a>
+                <form method="post" action="{{ url_for('admin_vehicle_status', vehicle_id=v.id) }}" class="inline-form">
+                    <select name="status" onchange="this.form.submit()" class="mini-select">
+                        <option value="" disabled selected>Set…</option>
+                        <option value="available">Available</option>
+                        <option value="pending">Pending</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                </form>
+                <form method="post" action="{{ url_for('admin_vehicle_delete', vehicle_id=v.id) }}" class="inline-form" onsubmit="return confirm('Delete this vehicle and its photos permanently?')">
+                    <button type="submit" class="btn-sm btn-sm-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="admin-empty">No vehicles in this view. <a href="{{ url_for('admin_vehicle_new') }}">Add one →</a></p>
+    {% endif %}
+</div>
+{% endblock %}

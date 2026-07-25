@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% from '_card.html' import vehicle_card %}
+
+{% block title %}{{ vehicle_title(v) }} for Sale — {{ SITE_NAME }}, Blytheville AR{% endblock %}
+{% block description %}{{ vehicle_title(v) }} for sale at {{ SITE_NAME }} in Blytheville, AR. {{ '{:,}'.format(v.mileage) }} miles, ${{ '{:,.0f}'.format(v.price) }}. {{ v.description[:120] if v.description }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Car",
+  "name": "{{ vehicle_title(v) }}",
+  "brand": {"@type": "Brand", "name": "{{ v.make }}"},
+  "model": "{{ v.model }}",
+  "vehicleModelDate": "{{ v.year }}",
+  "mileageFromOdometer": {"@type": "QuantitativeValue", "value": {{ v.mileage }}, "unitCode": "SMI"},
+  {% if v.vin %}"vehicleIdentificationNumber": "{{ v.vin }}",{% endif %}
+  {% if v.fuel_type %}"fuelType": "{{ v.fuel_type }}",{% endif %}
+  {% if v.body_type %}"bodyType": "{{ v.body_type }}",{% endif %}
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ '{:.0f}'.format(v.price) }}",
+    "priceCurrency": "USD",
+    "availability": "{{ 'https://schema.org/InStock' if v.status == 'available' else 'https://schema.org/SoldOut' }}",
+    "seller": {"@type": "AutoDealer", "name": "{{ SITE_NAME }}"}
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container breadcrumb">
+    <a href="{{ url_for('inventory') }}">← Back to Inventory</a>
+</div>
+
+<section class="section vehicle-detail">
+    <div class="container vehicle-layout">
+        <!-- GALLERY -->
+        <div class="vehicle-gallery">
+            {% set gallery = images if images else ([{'filename': v.main_image}] if v.main_image else []) %}
+            {% if gallery %}
+            <div class="gallery-main">
+                <img id="gallery-main-img" src="{{ url_for('static', filename='uploads/' ~ gallery[0].filename) }}" alt="{{ vehicle_title(v) }}">
+                {% if v.status != 'available' %}<span class="gallery-status">{{ 'Sale Pending' if v.status == 'pending' else 'Sold' }}</span>{% endif %}
+            </div>
+            {% if gallery|length > 1 %}
+            <div class="gallery-thumbs">
+                {% for img in gallery %}
+                <button type="button" class="gallery-thumb {{ 'active' if loop.first }}"
+                        onclick="document.getElementById('gallery-main-img').src=this.querySelector('img').src;
+                                 document.querySelectorAll('.gallery-thumb').forEach(t=>t.classList.remove('active'));
+                                 this.classList.add('active')">
+                    <img src="{{ url_for('static', filename='uploads/' ~ img.filename) }}" alt="{{ vehicle_title(v) }} photo {{ loop.index }}" loading="lazy">
+                </button>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="gallery-main gallery-noimg">🚗<span>Photos coming soon — call us for a look!</span></div>
+            {% endif %}
+        </div>
+
+        <!-- INFO -->
+        <div class="vehicle-info">
+            <h1>{{ vehicle_title(v) }}</h1>
+            <div class="vehicle-price">${{ '{:,.0f}'.format(v.price) }}</div>
+            <div class="vehicle-stockline">Stock #{{ v.stock_number }}{% if v.vin %} · VIN {{ v.vin }}{% endif %}</div>
+
+            <div class="spec-grid">
+                <div class="spec"><span>Mileage</span><strong>{{ '{:,}'.format(v.mileage) }} mi</strong></div>
+                {% if v.body_type %}<div class="spec"><span>Body</span><strong>{{ v.body_type }}</strong></div>{% endif %}
+                {% if v.transmission %}<div class="spec"><span>Transmission</span><strong>{{ v.transmission }}</strong></div>{% endif %}
+                {% if v.drivetrain %}<div class="spec"><span>Drivetrain</span><strong>{{ v.drivetrain }}</strong></div>{% endif %}
+                {% if v.fuel_type %}<div class="spec"><span>Fuel</span><strong>{{ v.fuel_type }}</strong></div>{% endif %}
+                {% if v.engine %}<div class="spec"><span>Engine</span><strong>{{ v.engine }}</strong></div>{% endif %}
+                {% if v.exterior_color %}<div class="spec"><span>Exterior</span><strong>{{ v.exterior_color }}</strong></div>{% endif %}
+                {% if v.interior_color %}<div class="spec"><span>Interior</span><strong>{{ v.interior_color }}</strong></div>{% endif %}
+                {% if v.mpg_city and v.mpg_highway %}<div class="spec"><span>MPG</span><strong>{{ v.mpg_city }} city / {{ v.mpg_highway }} hwy</strong></div>{% endif %}
+                {% if v.doors %}<div class="spec"><span>Doors</span><strong>{{ v.doors }}</strong></div>{% endif %}
+            </div>
+
+            <div class="vehicle-actions">
+                <a href="tel:+1{{ BUSINESS_PHONE_RAW }}" class="btn btn-primary btn-lg">📞 Call {{ BUSINESS_PHONE }}</a>
+                <a href="{{ url_for('financing') }}" class="btn btn-gold btn-lg">Get Pre-Qualified</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container vehicle-lower">
+        <div class="vehicle-desc">
+            <h2>About This Vehicle</h2>
+            <p>{{ v.description or 'Contact us for full details on this vehicle. We\'re happy to answer any questions and schedule a test drive.' }}</p>
+        </div>
+
+        <!-- INQUIRY FORM -->
+        <div class="vehicle-inquiry" id="inquire">
+            <h2>Ask About This {{ v.make }}</h2>
+            <p class="muted">Send us a message and we'll get right back to you. No pressure.</p>
+            <form action="{{ url_for('inquiry') }}" method="post" class="lead-form">
+                <input type="hidden" name="vehicle_id" value="{{ v.id }}">
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="Your name*" required>
+                    <input type="tel" name="phone" placeholder="Phone*" required>
+                </div>
+                <input type="email" name="email" placeholder="Email (optional)">
+                <textarea name="message" rows="3" placeholder="I'm interested in the {{ vehicle_title(v) }} (Stock #{{ v.stock_number }}). Is it still available?">I'm interested in the {{ vehicle_title(v) }} (Stock #{{ v.stock_number }}). Is it still available?</textarea>
+                <button type="submit" class="btn btn-gold btn-lg btn-block">Send Inquiry</button>
+            </form>
+        </div>
+    </div>
+
+    {% if similar %}
+    <div class="container">
+        <div class="section-head"><h2>You May Also Like</h2></div>
+        <div class="car-grid">
+            {% for s in similar %}{{ vehicle_card(s) }}{% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

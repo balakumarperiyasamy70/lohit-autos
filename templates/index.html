@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% from '_card.html' import vehicle_card %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-inner">
+        <div class="hero-text">
+            <span class="hero-eyebrow">Blytheville, Arkansas</span>
+            <h1>Quality Used Cars,<br>Honest Prices.</h1>
+            <p>Hand-picked pre-owned cars, trucks, and SUVs — inspected, priced fair, and ready to drive home. Financing available for all credit situations.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('inventory') }}" class="btn btn-gold btn-lg">Browse Inventory{% if inventory_count %} ({{ inventory_count }}){% endif %}</a>
+                <a href="{{ url_for('financing') }}" class="btn btn-outline-light btn-lg">Get Pre-Qualified</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- QUICK SEARCH BAR -->
+<section class="quick-search">
+    <div class="container">
+        <form action="{{ url_for('inventory') }}" method="get" class="quick-search-form">
+            <input type="text" name="q" placeholder="Search make, model, or year…" aria-label="Search inventory">
+            <select name="price_max" aria-label="Max price">
+                <option value="">Any price</option>
+                <option value="10000">Under $10,000</option>
+                <option value="15000">Under $15,000</option>
+                <option value="20000">Under $20,000</option>
+                <option value="30000">Under $30,000</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</section>
+
+<!-- VALUE PROPS -->
+<section class="section">
+    <div class="container">
+        <div class="value-grid">
+            <div class="value-item">
+                <div class="value-icon">✓</div>
+                <h3>Inspected & Reconditioned</h3>
+                <p>Every vehicle is checked over before it hits our lot, so you drive away with confidence.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">$</div>
+                <h3>Fair, Upfront Pricing</h3>
+                <p>No hidden fees or games. The price you see is honest and competitive for the market.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">%</div>
+                <h3>Financing for All Credit</h3>
+                <p>Good credit, bad credit, or no credit — we work with lenders to find you an option.</p>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">↺</div>
+                <h3>We Buy & Trade</h3>
+                <p>Get top dollar for your current vehicle whether you're buying from us or not.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURED INVENTORY -->
+<section class="section section-light">
+    <div class="container">
+        <div class="section-head">
+            <h2>Featured Vehicles</h2>
+            <a href="{{ url_for('inventory') }}" class="section-link">View all inventory →</a>
+        </div>
+        {% if featured %}
+        <div class="car-grid">
+            {% for v in featured %}{{ vehicle_card(v) }}{% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">New inventory arriving soon — <a href="{{ url_for('contact') }}">contact us</a> to hear about what's coming in.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- FINANCING CTA -->
+<section class="cta-band">
+    <div class="container cta-band-inner">
+        <div>
+            <h2>Pre-Qualify in Minutes</h2>
+            <p>Fill out a quick, no-obligation form. It won't affect your credit score, and we'll get right back to you with your options.</p>
+        </div>
+        <a href="{{ url_for('financing') }}" class="btn btn-gold btn-lg">Start Financing</a>
+    </div>
+</section>
+
+<!-- TRADE / SELL -->
+<section class="section">
+    <div class="container two-col">
+        <div>
+            <span class="eyebrow">Sell or Trade</span>
+            <h2>Get Cash or Credit for Your Ride</h2>
+            <p>Looking to sell your car or trade it toward your next one? Tell us about your vehicle and we'll give you a fair, competitive offer — no obligation to buy.</p>
+            <a href="{{ url_for('sell') }}" class="btn btn-primary btn-lg">Value My Trade</a>
+        </div>
+        <div class="two-col-visual">
+            <div class="stat-tile"><strong>{{ inventory_count }}+</strong><span>Vehicles in stock</span></div>
+            <div class="stat-tile"><strong>All Credit</strong><span>Financing welcome</span></div>
+            <div class="stat-tile"><strong>Local</strong><span>Family-owned in Blytheville</span></div>
+        </div>
+    </div>
+</section>
+{% endblock %}

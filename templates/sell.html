@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Sell or Trade Your Car — {{ SITE_NAME }}, Blytheville AR{% endblock %}
+{% block description %}Sell your car or trade it in at {{ SITE_NAME }} in Blytheville, AR. Get a fair, no-obligation offer. We buy cars, trucks, and SUVs.{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="container">
+        <h1>Sell or Trade Your Vehicle</h1>
+        <p>Get a fair, no-obligation offer — whether you're buying from us or just selling.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container form-page-layout">
+        <div class="form-page-info">
+            <span class="eyebrow">Cash or trade credit</span>
+            <h2>We Want Your Vehicle</h2>
+            <p>Tell us a little about your car and we'll put together a competitive offer. Trade it toward one of ours for extra value, or take cash — your choice.</p>
+            <div class="info-card">
+                <h4>What we buy</h4>
+                <ul class="check-list">
+                    <li>Cars, trucks, SUVs, and vans</li>
+                    <li>Most makes, models, and years</li>
+                    <li>Running or with minor issues — just let us know</li>
+                    <li>No purchase required to sell to us</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <h2>Tell Us About Your Vehicle</h2>
+            <form action="{{ url_for('sell') }}" method="post" class="lead-form">
+                <label class="field-label">Your Information</label>
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="Full name*" required>
+                    <input type="tel" name="phone" placeholder="Phone*" required>
+                </div>
+                <input type="email" name="email" placeholder="Email address">
+
+                <label class="field-label">Your Vehicle</label>
+                <div class="form-row form-row-3">
+                    <input type="number" name="trade_year" placeholder="Year" min="1950" max="2027">
+                    <input type="text" name="trade_make" placeholder="Make">
+                    <input type="text" name="trade_model" placeholder="Model">
+                </div>
+                <div class="form-row">
+                    <input type="number" name="trade_mileage" placeholder="Mileage" min="0" step="1000">
+                    <select name="trade_condition">
+                        <option value="">Condition</option>
+                        <option>Excellent</option>
+                        <option>Good</option>
+                        <option>Fair</option>
+                        <option>Poor / Needs work</option>
+                    </select>
+                </div>
+                <textarea name="message" rows="3" placeholder="Anything else about your vehicle? (options, condition notes, whether you want to trade or sell outright)"></textarea>
+
+                <button type="submit" class="btn btn-gold btn-lg btn-block">Get My Offer</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
